@@ -1,0 +1,17 @@
+# Interdire l'accès à l'administration
+Disallow: /admin.php
+Disallow: /login.php
+Disallow: /logout.php
+Disallow: /traitement_contact.php
+
+# Interdire l'accès aux dossiers techniques
+Disallow: /config/
+Disallow: /includes/
+
+# Protéger les fichiers média 
+Disallow: /media/audios/
+Disallow: /media/karaoke/
+
+# Autoriser les images pour Google Images
+Allow: /media/images/
+
