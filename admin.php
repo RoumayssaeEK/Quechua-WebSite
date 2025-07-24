@@ -139,7 +139,7 @@ function modifierChanson($pdo) {
             if ($karaoke_path && file_exists("media/karaoke/" . $karaoke_path)) {
                 unlink("media/karaoke/" . $karaoke_path);
             }
-            $karaoke_path = null; // ou ''
+            $karaoke_path = null; 
         }
         
         // Upload nouveaux fichiers si fournis
@@ -160,38 +160,38 @@ function modifierChanson($pdo) {
         }
 
         // Gérer l’auteur
-if ($nomAuteur) {
-    $stmtAuteur = $pdo->prepare("SELECT id_auteur FROM auteur WHERE nom = :nom");
-    $stmtAuteur->execute([':nom' => $nomAuteur]);
-    $auteur = $stmtAuteur->fetch();
+        if ($nomAuteur) {
+            $stmtAuteur = $pdo->prepare("SELECT id_auteur FROM auteur WHERE nom = :nom");
+            $stmtAuteur->execute([':nom' => $nomAuteur]);
+            $auteur = $stmtAuteur->fetch();
 
-    if ($auteur) {
-        $idAuteur = $auteur['id_auteur'];
-    } else {
-        $stmtInsert = $pdo->prepare("INSERT INTO auteur (nom) VALUES (:nom)");
-        $stmtInsert->execute([':nom' => $nomAuteur]);
-        $idAuteur = $pdo->lastInsertId();
-    }
-} else {
-    $idAuteur = null;
-}
+        if ($auteur) {
+            $idAuteur = $auteur['id_auteur'];
+        } else {
+            $stmtInsert = $pdo->prepare("INSERT INTO auteur (nom) VALUES (:nom)");
+            $stmtInsert->execute([':nom' => $nomAuteur]);
+            $idAuteur = $pdo->lastInsertId();
+        }
+        } else {
+            $idAuteur = null;
+        }
 
-// Gérer l’interprète
-if ($nomInterprete) {
-    $stmtInterprete = $pdo->prepare("SELECT id_interprete FROM interprete WHERE nom = :nom");
-    $stmtInterprete->execute([':nom' => $nomInterprete]);
-    $interprete = $stmtInterprete->fetch();
+      // Gérer l’interprète
+       if ($nomInterprete) {
+           $stmtInterprete = $pdo->prepare("SELECT id_interprete FROM interprete WHERE nom = :nom");
+           $stmtInterprete->execute([':nom' => $nomInterprete]);
+           $interprete = $stmtInterprete->fetch();
 
-    if ($interprete) {
-        $idInterprete = $interprete['id_interprete'];
-    } else {
-        $stmtInsert = $pdo->prepare("INSERT INTO interprete (nom) VALUES (:nom)");
-        $stmtInsert->execute([':nom' => $nomInterprete]);
-        $idInterprete = $pdo->lastInsertId();
-    }
-} else {
-    $idInterprete = null;
-}
+        if ($interprete) {
+            $idInterprete = $interprete['id_interprete'];
+        } else {
+            $stmtInsert = $pdo->prepare("INSERT INTO interprete (nom) VALUES (:nom)");
+            $stmtInsert->execute([':nom' => $nomInterprete]);
+            $idInterprete = $pdo->lastInsertId();
+        }
+        } else {
+            $idInterprete = null;
+        }
 
         
         $query = "UPDATE chansons SET titre_quechua = ?, titre_langue = ?, paroles_quechua = ?, 
@@ -214,7 +214,7 @@ function supprimerChanson($pdo) {
     try {
         $id = $_POST['id'] ?? 0;
         
-        // Récupérer les chemins des fichiers
+        
         $stmt = $pdo->prepare("SELECT audio, karaoke FROM chansons WHERE id = ?");
         $stmt->execute([$id]);
         $chanson = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -239,7 +239,7 @@ function supprimerChanson($pdo) {
 
 // Fonction pour upload des fichiers
 function uploadFile($file, $type) {
-    // Définir les dossiers et types autorisés selon le type de fichier
+    
     if ($type === 'audio') {
         $upload_dir = "media/audios/";
         $allowed_types = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
@@ -265,13 +265,13 @@ function uploadFile($file, $type) {
         throw new Exception("Extension de fichier non autorisée. Extensions autorisées : " . implode(', ', $allowed_extensions));
     }
     
-    // Vérifier le type MIME 
+    
     if (!in_array($file['type'], $allowed_types)) {
-        // Log pour debug, mais ne pas bloquer
+        
         error_log("Type MIME non reconnu : " . $file['type'] . " pour le fichier : " . $file['name']);
     }
     
-    // Vérifier la taille du fichier (50MB max)
+    
     $max_size = 50 * 1024 * 1024; // 50MB
     if ($file['size'] > $max_size) {
         throw new Exception("Le fichier est trop volumineux. Taille maximale : 50MB");
@@ -280,11 +280,11 @@ function uploadFile($file, $type) {
     $original_name = pathinfo($file['name'], PATHINFO_FILENAME);
     $clean_name = preg_replace("/[^a-zA-Z0-9\-_]/", "_", $original_name);
     
-    // Ajouter un suffixe unique pour éviter les conflits
+    
     $filename = $clean_name . '_' . uniqid() . '.' . $extension;
     $filepath = $upload_dir . $filename;
     
-    // Déplacer le fichier
+   
     if (!move_uploaded_file($file['tmp_name'], $filepath)) {
         throw new Exception("Erreur lors de l'upload du fichier");
     }
@@ -661,16 +661,16 @@ include 'includes/header.php';
             </div>
 
             <!-- Nom de l’auteur -->
-<div class="mb-3">
-    <label for="nom_auteur" class="form-label">Nom de l’auteur</label>
-    <input type="text" name="nom_auteur" id="nom_auteur" class="form-control" required>
-</div>
+           <div class="mb-3">
+               <label for="nom_auteur" class="form-label">Nom de l’auteur</label>
+               <input type="text" name="nom_auteur" id="nom_auteur" class="form-control" required>
+           </div>
 
-<!-- Nom de l’interprète -->
-<div class="mb-3">
-    <label for="nom_interprete" class="form-label">Nom de l’interprète</label>
-    <input type="text" name="nom_interprete" id="nom_interprete" class="form-control" required>
-</div>
+          <!-- Nom de l’interprète -->
+           <div class="mb-3">
+               <label for="nom_interprete" class="form-label">Nom de l’interprète</label>
+               <input type="text" name="nom_interprete" id="nom_interprete" class="form-control" required>
+           </div>
 
             
             <div class="form-group">
@@ -740,20 +740,16 @@ include 'includes/header.php';
             </div>
 
             <div class="form-group">
-    <label for="edit_nom_auteur">Nom de l’auteur</label>
-    <input type="text" class="form-control" name="nom_auteur" id="edit_nom_auteur">
-</div>
+                <label for="edit_nom_auteur">Nom de l’auteur</label>
+                <input type="text" class="form-control" name="nom_auteur" id="edit_nom_auteur">
+           </div>
 
-<div class="form-group">
-    <label for="edit_nom_interprete">Nom de l’interprète</label>
-    <input type="text" class="form-control" name="nom_interprete" id="edit_nom_interprete">
-</div>
-
-
-   
+           <div class="form-group">
+               <label for="edit_nom_interprete">Nom de l’interprète</label>
+               <input type="text" class="form-control" name="nom_interprete" id="edit_nom_interprete">
+           </div>
 
 
-            
             <div class="form-group">
                 <label for="edit_audio">Nouveau fichier Audio </label>
                 <input type="file" class="form-control" name="audio" accept="audio/*" ondblclick="this.value=''">   

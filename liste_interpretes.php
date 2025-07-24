@@ -1,10 +1,21 @@
 <?php
 require_once 'config/database.php';
 
+// Système de traduction
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr';
+$allowed_langs = ['fr', 'es'];
+
+if (!in_array($lang, $allowed_langs)) {
+    $lang = 'fr';
+}
+
+// Charger le fichier de traduction
+$translations = include "lang/{$lang}.php";
+
 $database = new Database();
 $interpretes = $database->getAllInterpretes();
 
-$page_title = "Interprètes - Ma chanson en quechua";
+$page_title = $translations['interpreters_page_title'];
 include 'includes/header.php';
 ?>
 
@@ -19,23 +30,23 @@ include 'includes/header.php';
                     <nav aria-label="breadcrumb" class="mb-4">
                         <ol class="breadcrumb justify-content-center bg-transparent">
                             <li class="breadcrumb-item">
-                                <a href="index.php" class="text-white-50">
-                                    <i class="fas fa-home"></i> Accueil
+                                <a href="index.php?lang=<?php echo $lang; ?>" class="text-white-50">
+                                    <i class="fas fa-home"></i> <?php echo $translations['breadcrumb_home']; ?>
                                 </a>
                             </li>
                             <li class="breadcrumb-item active text-white" aria-current="page">
-                                <i class="fas fa-users"></i> Interprètes
+                                <i class="fas fa-users"></i> <?php echo $translations['nav_interpreters']; ?>
                             </li>
                         </ol>
                     </nav>
                     
-                    <h1><i class="fas fa-users"></i> Nos Interprètes</h1>
-                    <p class="lead">Découvrez les talents qui donnent vie à nos chansons quechua</p>
+                    <h1><i class="fas fa-users"></i> <?php echo $translations['interpreters_title']; ?></h1>
+                    <p class="lead"><?php echo $translations['interpreters_subtitle']; ?></p>
                     
                     <div class="mt-4">
                         <span class="badge bg-warning text-dark fs-6 px-3 py-2">
                             <i class="fas fa-microphone"></i> 
-                            <?php echo count($interpretes); ?> interprètes talentueux
+                            <?php echo count($interpretes); ?> <?php echo $translations['talented_interpreters']; ?>
                         </span>
                     </div>
                 </div>
@@ -51,8 +62,8 @@ include 'includes/header.php';
                     <div class="mb-4">
                         <i class="fas fa-users text-muted" style="font-size: 4rem;"></i>
                     </div>
-                    <h3 class="text-muted">Aucun interprète disponible</h3>
-                    <p class="text-muted">Notre équipe d'interprètes sera bientôt présentée ici.</p>
+                    <h3 class="text-muted"><?php echo $translations['no_interpreters_title']; ?></h3>
+                    <p class="text-muted"><?php echo $translations['no_interpreters_text']; ?></p>
                 </div>
             <?php else: ?>
                 <div class="row g-4">
@@ -71,16 +82,16 @@ include 'includes/header.php';
                                     </h5>
                                     
                                     <p class="card-text text-muted mb-4 flex-grow-1">
-                                        Découvrez toutes les chansons interprétées par 
+                                        <?php echo $translations['discover_songs_by']; ?> 
                                         <strong><?php echo htmlspecialchars($interprete['nom']); ?></strong>
-                                        dans notre collection.
+                                        <?php echo $translations['in_our_collection']; ?>
                                     </p>
                                     
                                     <div class="mt-auto">
-                                        <a href="interprete.php?id=<?php echo $interprete['id_interprete']; ?>" 
+                                        <a href="interprete.php?id=<?php echo $interprete['id_interprete']; ?>&lang=<?php echo $lang; ?>" 
                                            class="btn btn-primary w-100 btn-lg">
                                             <i class="fas fa-music me-2"></i>
-                                            Voir les chansons
+                                            <?php echo $translations['view_songs']; ?>
                                         </a>
                                     </div>
                                 </div>

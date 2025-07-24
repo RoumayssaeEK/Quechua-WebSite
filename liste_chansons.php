@@ -180,7 +180,7 @@ include 'includes/header.php';
 </main>
 
 <style>
-/* Styles pour les cartes de chansons */
+
 .chanson-card {
     transition: all 0.3s ease;
     border-radius: 15px;

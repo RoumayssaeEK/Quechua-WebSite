@@ -77,4 +77,28 @@ return [
     'lyrics_in' => 'Letras en',
     'karaoke_video_title' => 'Video Karaoke',
     'video_not_supported' => 'Su navegador no soporta el video HTML5.',
+
+
+    'interpreters_page_title' => 'Intérpretes - Mi canción en quechua',
+    'interpreters_title' => 'Nuestros Intérpretes',
+    'interpreters_subtitle' => 'Descubre los talentos que dan vida a nuestras canciones quechua',
+    'talented_interpreters' => 'intérpretes talentosos',
+    'no_interpreters_title' => 'No hay intérpretes disponibles',
+    'no_interpreters_text' => 'Nuestro equipo de intérpretes será presentado aquí pronto.',
+    'discover_songs_by' => 'Descubre todas las canciones interpretadas por',
+    'in_our_collection' => 'en nuestra colección.',
+    'view_songs' => 'Ver las canciones',
+
+
+    'interpreter_page_title_prefix' => 'Canciones de ',
+    'interpreter_page_title_suffix' => ' - Mi canción en quechua',
+    'song_singular' => 'canción',
+    'songs_plural' => 'canciones',
+    'interpreted_singular' => 'interpretada',
+    'interpreted_plural' => 'interpretadas',
+    'about_title' => 'Acerca de',
+    'songs_by' => 'Canciones de',
+    'no_songs_available_title' => 'No hay canciones disponibles',
+    'no_songs_interpreter_text' => 'Este intérprete aún no tiene canciones en nuestra colección.',
+    'back_to_interpreters' => 'Volver a los intérpretes',
 ];
