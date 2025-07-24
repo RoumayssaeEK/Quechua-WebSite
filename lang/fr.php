@@ -101,4 +101,35 @@ return [
     'no_songs_available_title' => 'Aucune chanson disponible',
     'no_songs_interpreter_text' => 'Cet interprète n\'a pas encore de chansons dans notre collection.',
     'back_to_interpreters' => 'Retour aux interprètes',
+
+
+    
+    'contact_us' => 'Contactez-nous',
+    'contact_subtitle' => 'Partagez votre passion pour la culture andine et la langue quechua avec notre équipe',
+    'send_message' => 'Envoyez-nous un message',
+    'or_contact_directly' => 'Ou contactez-nous directement',
+    
+   
+    'last_name' => 'Nom',
+    'first_name' => 'Prénom',
+    'email' => 'Email',
+    'subject' => 'Sujet',
+    'message' => 'Message',
+    'send_button' => 'Envoyer le message',
+    'required_field' => 'Champ requis',
+    
+    'choose_subject' => 'Choisissez un sujet',
+    'general_question' => 'Question générale',
+    'song_suggestion' => 'Suggestion de chanson',
+    'technical_problem' => 'Problème technique',
+    'partnership' => 'Partenariat',
+    'other' => 'Autre',
+    
+   
+    'please_enter_last_name' => 'Veuillez saisir votre nom.',
+    'please_enter_first_name' => 'Veuillez saisir votre prénom.',
+    'please_enter_valid_email' => 'Veuillez saisir une adresse email valide.',
+    'please_select_subject' => 'Veuillez sélectionner un sujet.',
+    'please_enter_message' => 'Veuillez saisir votre message.',
+
 ];

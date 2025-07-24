@@ -3,15 +3,15 @@
 require_once 'config/database.php';
 
 // Système de traduction
-$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr'; // Langue par défaut : français
-$allowed_langs = ['fr', 'es']; // Langues autorisées
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr'; 
+$allowed_langs = ['fr', 'es']; 
 
-// Vérifier si la langue est autorisée, sinon utiliser le français
+
 if (!in_array($lang, $allowed_langs)) {
     $lang = 'fr';
 }
 
-// Charger le fichier de traduction
+
 $translations = include "lang/{$lang}.php";
 
 $database = new Database();

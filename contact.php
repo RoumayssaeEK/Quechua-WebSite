@@ -1,4 +1,17 @@
 <?php
+
+// Système de traduction
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr';
+$allowed_langs = ['fr', 'es'];
+
+if (!in_array($lang, $allowed_langs)) {
+    $lang = 'fr';
+}
+
+// Charger le fichier de traduction
+$translations = include "lang/{$lang}.php";
+
+
 $page_title = "Contact - Ma chanson en quechua";
 include 'includes/header.php';
 ?>
@@ -9,8 +22,8 @@ include 'includes/header.php';
     
     <section class="hero-section">
         <div class="container">
-            <h1>Contactez-nous</h1>
-            <p class="lead">Partagez votre passion pour la culture andine et la langue quechua avec notre équipe</p>
+            <h1><?php echo $translations['contact_us']; ?></h1>
+            <p class="lead"><?php echo $translations['contact_subtitle']; ?></p>
         </div>
     </section>
 
@@ -20,60 +33,60 @@ include 'includes/header.php';
             <div class="row g-4">
                 <div class="col-lg-8 mx-auto">
                     <div class="feature-card p-4">
-                        <h2 class="text-center mb-4 display-5 text-dark">Envoyez-nous un message</h2>
+                        <h2 class="text-center mb-4 display-5 text-dark"><?php echo $translations['send_message']; ?></h2>
                         
                         <form action="traitement_contact.php" method="POST" class="needs-validation" novalidate>
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="nom" class="form-label">Nom *</label>
+                                    <label for="nom" class="form-label"><?php echo $translations['last_name']; ?> *</label>
                                     <input type="text" class="form-control" id="nom" name="nom" required>
                                     <div class="invalid-feedback">
-                                        Veuillez saisir votre nom.
+                                        <?php echo $translations['please_enter_last_name']; ?>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label for="prenom" class="form-label">Prénom *</label>
+                                    <label for="prenom" class="form-label"><?php echo $translations['first_name']; ?> *</label>
                                     <input type="text" class="form-control" id="prenom" name="prenom" required>
                                     <div class="invalid-feedback">
-                                        Veuillez saisir votre prénom.
+                                        <?php echo $translations['please_enter_first_name']; ?>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12">
-                                    <label for="email" class="form-label">Email *</label>
+                                    <label for="email" class="form-label"><?php echo $translations['email']; ?> *</label>
                                     <input type="email" class="form-control" id="email" name="email" required>
                                     <div class="invalid-feedback">
-                                        Veuillez saisir une adresse email valide.
+                                        <?php echo $translations['please_enter_valid_email']; ?>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12">
-                                    <label for="sujet" class="form-label">Sujet *</label>
+                                    <label for="sujet" class="form-label"><?php echo $translations['subject']; ?> *</label>
                                     <select class="form-select" id="sujet" name="sujet" required>
-                                        <option value="">Choisissez un sujet</option>
-                                        <option value="question_generale">Question générale</option>
-                                        <option value="suggestion_chanson">Suggestion de chanson</option>
-                                        <option value="probleme_technique">Problème technique</option>
-                                        <option value="partenariat">Partenariat</option>
-                                        <option value="autre">Autre</option>
+                                        <option value=""><?php echo $translations['choose_subject']; ?></option>
+                                        <option value="question_generale"><?php echo $translations['general_question']; ?></option>
+                                        <option value="suggestion_chanson"><?php echo $translations['song_suggestion']; ?></option>
+                                        <option value="probleme_technique"><?php echo $translations['technical_problem']; ?></option>
+                                        <option value="partenariat"><?php echo $translations['partnership']; ?></option>
+                                        <option value="autre"><?php echo $translations['other']; ?></option>
                                     </select>
                                     <div class="invalid-feedback">
-                                        Veuillez sélectionner un sujet.
+                                        <?php echo $translations['please_select_subject']; ?>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12">
-                                    <label for="message" class="form-label">Message *</label>
+                                    <label for="message" class="form-label"><?php echo $translations['message']; ?>*</label>
                                     <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
                                     <div class="invalid-feedback">
-                                        Veuillez saisir votre message.
+                                       <?php echo $translations['please_enter_message']; ?>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 text-center mt-4">
                                     <button type="submit" class="cta-button">
-                                        <i class="fas fa-paper-plane"></i> Envoyer le message
+                                        <i class="fas fa-paper-plane"></i> <?php echo $translations['send_button']; ?>
                                     </button>
                                 </div>
                             </div>
@@ -87,7 +100,7 @@ include 'includes/header.php';
     
     <div class="container">
         <section class="content-wrapper p-3">
-            <h2 class="text-center mb-3 display-7 text-dark">Ou contactez-nous directement</h2>
+            <h2 class="text-center mb-3 display-7 text-dark"><?php echo $translations['or_contact_directly']; ?></h2>
             <div class="row g-4 justify-content-center">
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <a href="mailto:contact@quechua-chante.com" class="text-decoration-none">
@@ -96,7 +109,7 @@ include 'includes/header.php';
                             <div class="feature-icon mb-2">
                                 <i class="fas fa-envelope"></i>
                             </div>
-                            <h3 class="h5 mb-2 text-dark">Email</h3>
+                            <h3 class="h5 mb-2 text-dark"><?php echo $translations['email']; ?></h3>
                             <p class="text-muted mb-0">contact@quechua-chante.com</p>
                         </div>
                     </a>
