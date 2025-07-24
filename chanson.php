@@ -2,28 +2,34 @@
 
 require_once 'config/database.php';
 
+// Système de traduction
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr';
+$allowed_langs = ['fr', 'es'];
+
+if (!in_array($lang, $allowed_langs)) {
+    $lang = 'fr';
+}
+
+// Charger le fichier de traduction
+$translations = include "lang/{$lang}.php";
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header('Location: liste_chansons.php');
+    header('Location: liste_chansons.php?lang=' . $lang);
     exit;
 }
 
 $database = new Database();
 $chanson = $database->getChansonWithLangueById($_GET['id']);
 
-
 if (!$chanson) {
-    header('Location: liste_chansons.php');
+    header('Location: liste_chansons.php?lang=' . $lang);
     exit;
 }
 
-
-$page_title = htmlspecialchars($chanson['titre']) . " - Ma chanson en quechua";
-
+$page_title = htmlspecialchars($chanson['titre']) . $translations['song_page_title_suffix'];
 
 include 'includes/header.php';
 ?>
-
 
 <?php include 'includes/navigation.php'; ?>
 
@@ -36,13 +42,13 @@ include 'includes/header.php';
                     <nav aria-label="breadcrumb" class="mb-4">
                         <ol class="breadcrumb justify-content-center bg-transparent">
                             <li class="breadcrumb-item">
-                                <a href="index.php" class="text-white-50">
-                                    <i class="fas fa-home"></i> Accueil
+                                <a href="index.php?lang=<?php echo $lang; ?>" class="text-white-50">
+                                    <i class="fas fa-home"></i> <?php echo $translations['breadcrumb_home']; ?>
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="liste_chansons.php" class="text-white-50">
-                                    <i class="fas fa-music"></i> Chansons
+                                <a href="liste_chansons.php?lang=<?php echo $lang; ?>" class="text-white-50">
+                                    <i class="fas fa-music"></i> <?php echo $translations['breadcrumb_songs']; ?>
                                 </a>
                             </li>
                             <li class="breadcrumb-item active text-white" aria-current="page">
@@ -65,10 +71,10 @@ include 'includes/header.php';
                     <?php if (!empty($chanson['nom_auteur']) || !empty($chanson['nom_interprete'])): ?>
                         <p class="text-white mb-2">
                           <?php if (!empty($chanson['nom_auteur'])): ?>
-                              <i class="fas fa-pen"></i> Auteur : <strong><?php echo htmlspecialchars($chanson['nom_auteur']); ?></strong><br>
+                              <i class="fas fa-pen"></i> <?php echo $translations['author_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_auteur']); ?></strong><br>
                           <?php endif; ?>
                           <?php if (!empty($chanson['nom_interprete'])): ?>
-                              <i class="fas fa-microphone-alt"></i> Interprète : <strong><?php echo htmlspecialchars($chanson['nom_interprete']); ?></strong>
+                              <i class="fas fa-microphone-alt"></i> <?php echo $translations['interpreter_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_interprete']); ?></strong>
                           <?php endif; ?>
                         </p>
                     <?php endif; ?>
@@ -86,19 +92,19 @@ include 'includes/header.php';
                 <div class="text-center">
                     <h3 class="mb-4">
                         <i class="fas fa-play-circle text-primary"></i> 
-                        Écouter la chanson
+                        <?php echo $translations['listen_song_title']; ?>
                     </h3>
                     <div class="audio-player bg-light p-4 rounded-3">
                         <audio controls class="w-100" style="max-width: 500px;">
                             <source src="media/audios/<?php echo htmlspecialchars($chanson['audio']); ?>" type="audio/mpeg">
                             <source src="media/audios/<?php echo htmlspecialchars($chanson['audio']); ?>" type="audio/wav">
-                            Votre navigateur ne supporte pas l'élément audio.
+                            <?php echo $translations['audio_not_supported']; ?>
                         </audio>
                     </div>
                 </div>
                 <div class="text-center mt-4">
                    <button class="btn btn-outline-danger" id="like-btn">
-                     <i class="fas fa-heart"></i> J'aime 
+                     <i class="fas fa-heart"></i> <?php echo $translations['like_button']; ?> 
                      (<span id="like-count"><?php echo htmlspecialchars($chanson['likes']); ?></span>)
                     </button>
                 </div>
@@ -111,7 +117,7 @@ include 'includes/header.php';
                 <div class="col-md-6">
                     <h4 class="text-center text-primary">
                         <i class="fas fa-quote-left"></i> 
-                        Paroles en Quechua
+                        <?php echo $translations['quechua_lyrics_title']; ?>
                     </h4>
                     <div class="paroles-text bg-light p-3 rounded-2">
                         <?php echo nl2br(htmlspecialchars($chanson['paroles_quechua'])); ?>
@@ -120,7 +126,7 @@ include 'includes/header.php';
                 <div class="col-md-6">
                     <h4 class="text-center text-success">
                         <i class="fas fa-language"></i> 
-                        Paroles en <?php echo htmlspecialchars($chanson['nom_langue']); ?>
+                        <?php echo $translations['lyrics_in']; ?> <?php echo htmlspecialchars($chanson['nom_langue']); ?>
                     </h4>
                     <div class="paroles-text bg-light p-3 rounded-2" style="font-style: italic;">
                         <?php echo nl2br(htmlspecialchars($chanson['paroles_langue'])); ?>
@@ -135,12 +141,12 @@ include 'includes/header.php';
                 <div class="text-center">
                     <h3 class="mb-4">
                         <i class="fas fa-microphone text-danger"></i> 
-                        Karaoké Vidéo
+                        <?php echo $translations['karaoke_video_title']; ?>
                     </h3>
                     <div class="video-player bg-light p-4 rounded-3">
                         <video controls class="w-100" style="max-width: 720px; border-radius: 12px;">
                             <source src="media/karaoke/<?php echo htmlspecialchars($chanson['karaoke']); ?>" type="video/mp4">
-                            Votre navigateur ne supporte pas la vidéo HTML5.
+                            <?php echo $translations['video_not_supported']; ?>
                         </video>
                     </div>
                 </div>
@@ -262,24 +268,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const likeBtn = document.getElementById("like-btn");
     const likeCount = document.getElementById("like-count");
 
-    likeBtn.addEventListener("click", function () {
-        fetch("like_chanson.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "id=<?php echo $chanson['id_chanson']; ?>"
-        })
-        .then(response => response.text())
-        .then(data => {
-            likeCount.textContent = data;
-            likeBtn.disabled = true;
-            likeBtn.innerHTML = `<i class="fas fa-heart"></i> Merci ! (<span id="like-count">${data}</span>)`;
-        })
-        .catch(error => {
-            console.error("Erreur:", error);
+    if (likeBtn) {
+        likeBtn.addEventListener("click", function () {
+            fetch("like_chanson.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "id=<?php echo $chanson['id_chanson']; ?>"
+            })
+            .then(response => response.text())
+            .then(data => {
+                likeCount.textContent = data;
+                likeBtn.disabled = true;
+                likeBtn.innerHTML = `<i class="fas fa-heart"></i> <?php echo $translations['like_thanks']; ?> (<span id="like-count">${data}</span>)`;
+            })
+            .catch(error => {
+                console.error("Erreur:", error);
+            });
         });
-    });
+    }
 });
 
 </script>

@@ -2,12 +2,22 @@
 
 require_once 'config/database.php';
 
+// Système de traduction
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr'; // Langue par défaut : français
+$allowed_langs = ['fr', 'es']; // Langues autorisées
+
+// Vérifier si la langue est autorisée, sinon utiliser le français
+if (!in_array($lang, $allowed_langs)) {
+    $lang = 'fr';
+}
+
+// Charger le fichier de traduction
+$translations = include "lang/{$lang}.php";
 
 $database = new Database();
 $total_chansons = $database->getTotalChansons();
 
-
-$page_title = "Ma chanson en quechua";
+$page_title = $translations['page_title'];
 
 include 'includes/header.php';
 ?>
@@ -18,10 +28,10 @@ include 'includes/header.php';
     
     <section class="hero-section">
         <div class="container">
-            <h1>Ma chanson en quechua</h1>
-            <p class="lead">J'apprends le quechua en chantant</p>
-            <a href="liste_chansons.php" class="cta-button">
-                <i class="fas fa-play"></i> Découvrir les chansons
+            <h1><?php echo $translations['hero_title']; ?></h1>
+            <p class="lead"><?php echo $translations['hero_lead']; ?></p>
+            <a href="liste_chansons.php?lang=<?php echo $lang; ?>" class="cta-button">
+                <i class="fas fa-play"></i> <?php echo $translations['cta_button']; ?>
             </a>
         </div>
     </section>
@@ -29,15 +39,15 @@ include 'includes/header.php';
     
     <div class="container">
         <section class="content-wrapper p-5">
-            <h2 class="text-center mb-5 display-5 text-dark">Une expérience culturelle unique</h2>
+             <h2 class="text-center mb-5 display-5 text-dark"><?php echo $translations['unique_experience_title']; ?></h2>
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6">
                     <div class="feature-card p-4 h-100 text-center">
                         <div class="feature-icon mb-3">
                             <i class="fas fa-language"></i>
                         </div>
-                        <h3 class="h4 mb-3 text-dark">Paroles bilingues</h3>
-                        <p class="text-muted">Des paroles qui voyagent entre le quechua et d'autres langues, en toute harmonie.</p>
+                        <h3 class="h4 mb-3 text-dark"><?php echo $translations['feature_1_title']; ?></h3>
+                        <p class="text-muted"><?php echo $translations['feature_1_text']; ?></p>
                     </div>
                 </div>
                 
@@ -46,8 +56,8 @@ include 'includes/header.php';
                         <div class="feature-icon mb-3">
                             <i class="fas fa-headphones"></i>
                         </div>
-                        <h3 class="h4 mb-3 text-dark">Audio authentique</h3>
-                        <p class="text-muted">Une immersion sonore à travers des interprétations diverses de la culture andine.</p>
+                        <h3 class="h4 mb-3 text-dark"><?php echo $translations['feature_2_title']; ?></h3>
+                        <p class="text-muted"><?php echo $translations['feature_2_text']; ?></p>
                     </div>
                 </div>
                 
@@ -56,14 +66,13 @@ include 'includes/header.php';
                         <div class="feature-icon mb-3">
                             <i class="fas fa-microphone"></i>
                         </div>
-                        <h3 class="h4 mb-3 text-dark">Mode karaoké</h3>
-                        <p class="text-muted">Apprenez à chanter en quechua grâce à nos pistes karaoké et perfectionnez votre prononciation de cette langue millénaire.</p>
+                        <h3 class="h4 mb-3 text-dark"><?php echo $translations['feature_3_title']; ?></h3>
+                        <p class="text-muted"><?php echo $translations['feature_3_text']; ?></p>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-
 
     <div class="container">
         <section class="stats-section p-5 text-center">
@@ -71,25 +80,25 @@ include 'includes/header.php';
                 <div class="col-lg-3 col-md-6">
                     <div class="p-3">
                         <span class="stat-number d-block"><?php echo $total_chansons; ?></span>
-                        <p class="mb-0">Chansons</p>
+                        <p class="mb-0"><?php echo $translations['stats_chansons']; ?></p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="p-3">
                         <span class="stat-number d-block">500</span>
-                        <p class="mb-0">Ans d'histoire musicale</p>
+                        <p class="mb-0"><?php echo $translations['stats_history']; ?></p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="p-3">
                         <span class="stat-number d-block">10</span>
-                        <p class="mb-0">Millions locuteurs quechua dans le monde</p>
+                        <p class="mb-0"><?php echo $translations['stats_speakers']; ?></p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="p-3">
                         <span class="stat-number d-block">3</span>
-                        <p class="mb-0">Pays des Andes représentés</p>
+                        <p class="mb-0"><?php echo $translations['stats_countries']; ?></p>
                     </div>
                 </div>
             </div>
@@ -99,28 +108,28 @@ include 'includes/header.php';
     
     <div class="container">
         <section class="content-wrapper p-5">
-            <h2 class="text-center mb-4 display-5 text-dark">Pourquoi le quechua ?</h2>
+            <h2 class="text-center mb-4 display-5 text-dark"><?php echo $translations['why_title']; ?></h2>
             <div class="text-center mx-auto" style="max-width: 800px;">
                 <p class="lead text-muted mb-4">
-                    Le quechua, parlé par plus de 10 millions de personnes à travers les Andes, est bien plus qu'une langue : c'est un pont vers une civilisation ancestrale riche en sagesse, en poésie et en harmonie avec la nature.
+                    <?php echo $translations['why_text']; ?>
                 </p>
                 <div class="row g-4 mt-4">
                     <div class="col-lg-4 col-md-6">
                         <div class="p-4 bg-light rounded">
-                            <h4 class="h5 mb-3" style="color: #e67e22;"> Patrimoine vivant</h4>
-                            <p class="mb-0 text-muted">Une tradition orale millénaire transmise de génération en génération</p>
+                            <h4 class="h5 mb-3" style="color: #e67e22;"><?php echo $translations['heritage_title']; ?></h4>
+                            <p class="mb-0 text-muted"><?php echo $translations['heritage_text']; ?></p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="p-4 bg-light rounded">
-                            <h4 class="h5 mb-3" style="color: #e67e22;"> Expression artistique</h4>
-                            <p class="mb-0 text-muted">Des mélodies qui racontent l'histoire des peuples des Andes</p>
+                            <h4 class="h5 mb-3" style="color: #e67e22;"><?php echo $translations['art_title']; ?></h4>
+                            <p class="mb-0 text-muted"><?php echo $translations['art_text']; ?></p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="p-4 bg-light rounded">
-                            <h4 class="h5 mb-3" style="color: #e67e22;"> Sagesse ancestrale</h4>
-                            <p class="mb-0 text-muted">Une philosophie de vie en harmonie avec la Pachamama (Terre-Mère)</p>
+                            <h4 class="h5 mb-3" style="color: #e67e22;"><?php echo $translations['wisdom_title']; ?></h4>
+                            <p class="mb-0 text-muted"><?php echo $translations['wisdom_text']; ?></p>
                         </div>
                     </div>
                 </div>
@@ -130,14 +139,14 @@ include 'includes/header.php';
 
     
    <div class="container my-5">
-    <h2 class="text-center mb-4 display-5" style="color: #f8f9fa;">Voyage visuel dans les Andes</h2>
+    <h2 class="text-center mb-4 display-5" style="color: #f8f9fa;"><?php echo $translations['visual_journey_title']; ?></h2>
     <div class="row g-4">
         <div class="col-md-4">
             <div class="image-card">
                 <img src="media/images/inca.jpeg" alt="Inca" class="img-fluid rounded">
                 <div class="image-caption text-center mt-2">
-                    <strong style="color:#f8f9fa; font-size:1.2rem;">Empires Incas</strong>
-                    <p style="color:#f8f9fa; font-size:1rem;">Plongez dans la grandeur d'une civilisation mythique.</p>
+                    <strong style="color:#f8f9fa; font-size:1.2rem;"><?php echo $translations['inca_title']; ?></strong>
+                    <p style="color:#f8f9fa; font-size:1rem;"><?php echo $translations['inca_text']; ?></p>
                 </div>
             </div>
         </div>
@@ -145,8 +154,8 @@ include 'includes/header.php';
             <div class="image-card">
                 <img src="media/images/machu pichu.jpg" alt="Machu Picchu" class="img-fluid rounded">
                 <div class="image-caption text-center mt-2">
-                    <strong style="color:#f8f9fa; font-size:1.2rem;">Machu Picchu</strong>
-                    <p style="color:#f8f9fa; font-size:1rem;">Le joyau architectural caché dans les sommets andins.</p>
+                    <strong style="color:#f8f9fa; font-size:1.2rem;"><?php echo $translations['machu_title']; ?></strong>
+                    <p style="color:#f8f9fa; font-size:1rem;"><?php echo $translations['machu_text']; ?></p>
                 </div>
             </div>
         </div>
@@ -154,24 +163,23 @@ include 'includes/header.php';
             <div class="image-card">
                 <img src="media/images/perou.jpg" alt="Culture Quechua" class="img-fluid rounded">
                 <div class="image-caption text-center mt-2">
-                    <strong style="color:#f8f9fa; font-size:1.2rem;">Vie quechua</strong>
-                    <p style="color:#f8f9fa; font-size:1rem;">Couleurs, musique et traditions des peuples andins.</p>
+                    <strong style="color:#f8f9fa; font-size:1.2rem;"><?php echo $translations['quechua_life_title']; ?></strong>
+                    <p style="color:#f8f9fa; font-size:1rem;"><?php echo $translations['quechua_life_text']; ?></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
 </main>
+
 <style>
    .image-card img {
     height: 230px;
-    width: 100%; /* Ajouté pour uniformiser */
+    width: 100%;
     object-fit: cover;
 }
 
-/* Si tu veux, tu peux aussi styliser le texte dans CSS plutôt qu'en inline */
 .image-caption strong {
     color: #f8f9fa;
     font-size: 1.2rem;
@@ -182,7 +190,40 @@ include 'includes/header.php';
     font-size: 1rem;
 }
 
+/* Style pour le sélecteur de langue */
+.lang-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
 
+.lang-selector a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 2px;
+    background: rgba(255,255,255,0.9);
+    color: #333;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.lang-selector a.active {
+    background: #e67e22;
+    color: white;
+}
+
+.lang-selector a:hover {
+    background: #d35400;
+    color: white;
+}
 </style>
+
+<!-- Sélecteur de langue -->
+<div class="lang-selector">
+    <a href="?lang=fr" class="<?php echo $lang === 'fr' ? 'active' : ''; ?>">FR</a>
+    <a href="?lang=es" class="<?php echo $lang === 'es' ? 'active' : ''; ?>">ES</a>
+</div>
 
 <?php include 'includes/footer.php'; ?>

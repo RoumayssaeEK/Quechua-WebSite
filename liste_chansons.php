@@ -2,6 +2,17 @@
 
 require_once 'config/database.php';
 
+// Système de traduction
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr';
+$allowed_langs = ['fr', 'es'];
+
+if (!in_array($lang, $allowed_langs)) {
+    $lang = 'fr';
+}
+
+// Charger le fichier de traduction
+$translations = include "lang/{$lang}.php";
+
 $database = new Database();
 
 $limit = 9;
@@ -26,7 +37,7 @@ if ($search) {
     $totalPages = ceil($totalChansons / $limit);
 }
 
-$page_title = "Liste des Chansons - Ma chanson en quechua";
+$page_title = $translations['songs_page_title'];
 
 include 'includes/header.php';
 ?>
@@ -36,18 +47,19 @@ include 'includes/header.php';
 <main>
     <section class="hero-section">
         <div class="container">
-            <h1><i class="fas fa-music"></i> Collection de Chansons</h1>
-            <p class="lead">Découvrez notre collection multilingue avec traductions en quechua</p>
+            <h1><i class="fas fa-music"></i> <?php echo $translations['songs_collection_title']; ?></h1>
+            <p class="lead"><?php echo $translations['songs_collection_subtitle']; ?></p>
             
             <div class="mt-4">
                 <span class="badge bg-warning text-dark fs-6 px-3 py-2">
                     <i class="fas fa-compact-disc"></i> 
-                    <?php echo count($chansons); ?> chansons disponibles
+                    <?php echo count($chansons); ?> <?php echo $translations['songs_available']; ?>
                 </span>
             </div>
             
             <!-- Formulaire de recherche et dropdown interprètes -->
             <form method="get" action="" class="mt-4">
+                <input type="hidden" name="lang" value="<?php echo $lang; ?>">
                 <div class="row justify-content-center align-items-end g-3">
                     <!-- Champ de recherche -->
                     <div class="col-lg-6 col-md-7">
@@ -56,7 +68,7 @@ include 'includes/header.php';
                                 type="text" 
                                 class="form-control" 
                                 name="search" 
-                                placeholder="Rechercher un titre..." 
+                                placeholder="<?php echo $translations['search_placeholder']; ?>" 
                                 value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
                             >
                             <button class="btn btn-warning" type="submit">
@@ -77,8 +89,8 @@ include 'includes/header.php';
                     <div class="mb-4">
                         <i class="fas fa-music text-muted" style="font-size: 4rem;"></i>
                     </div>
-                    <h3 class="text-muted">Aucune chanson disponible</h3>
-                    <p class="text-muted">La collection sera bientôt enrichie avec des chansons de différentes langues et leurs traductions.</p>
+                    <h3 class="text-muted"><?php echo $translations['no_songs_title']; ?></h3>
+                    <p class="text-muted"><?php echo $translations['no_songs_text']; ?></p>
                 </div>
             <?php else: ?>
                 <div class="row g-4">
@@ -106,10 +118,10 @@ include 'includes/header.php';
                                     <?php endif; ?>
                                     
                                     <div class="mt-auto">
-                                        <a href="chanson.php?id=<?php echo $chanson['id']; ?>" 
+                                        <a href="chanson.php?id=<?php echo $chanson['id']; ?>&lang=<?php echo $lang; ?>" 
                                            class="btn btn-primary w-100 btn-lg">
                                             <i class="fas fa-headphones"></i> 
-                                            Écouter la chanson
+                                            <?php echo $translations['listen_song']; ?>
                                         </a>
                                     </div>
                                 </div>
@@ -122,10 +134,14 @@ include 'includes/header.php';
             <!-- Pagination -->
             <nav aria-label="Pagination">
                 <ul class="pagination justify-content-center mt-4">
-                    <?php $searchQuery = isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>
+                    <?php 
+                    $searchQuery = isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; 
+                    $langQuery = '&lang=' . $lang;
+                    $baseQuery = $searchQuery . $langQuery;
+                    ?>
 
                     <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo max(1, $page - 1) . $searchQuery; ?>" aria-label="Page précédente">
+                        <a class="page-link" href="?page=<?php echo max(1, $page - 1) . $baseQuery; ?>" aria-label="<?php echo $translations['previous_page']; ?>">
                             &laquo;
                         </a>
                     </li>
@@ -136,24 +152,24 @@ include 'includes/header.php';
                     $end = min($totalPages, $page + $range);
 
                     if ($start > 1) {
-                        echo '<li class="page-item"><a class="page-link" href="?page=1' . $searchQuery . '">1</a></li>';
+                        echo '<li class="page-item"><a class="page-link" href="?page=1' . $baseQuery . '">1</a></li>';
                         if ($start > 2) echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
                     }
 
                     for ($i = $start; $i <= $end; $i++) {
                         echo '<li class="page-item">';
-                        echo '<a class="page-link" href="?page=' . $i . $searchQuery . '" style="' . ($i == $page ? 'font-weight:bold; background-color:transparent; border:none;' : '') . '">' . $i . '</a>';
+                        echo '<a class="page-link" href="?page=' . $i . $baseQuery . '" style="' . ($i == $page ? 'font-weight:bold; background-color:transparent; border:none;' : '') . '">' . $i . '</a>';
                         echo '</li>';
                     }
 
                     if ($end < $totalPages) {
                         if ($end < $totalPages - 1) echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                        echo '<li class="page-item"><a class="page-link" href="?page=' . $totalPages . $searchQuery . '">' . $totalPages . '</a></li>';
+                        echo '<li class="page-item"><a class="page-link" href="?page=' . $totalPages . $baseQuery . '">' . $totalPages . '</a></li>';
                     }
                     ?>
                     
                     <li class="page-item <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo min($totalPages, $page + 1) . $searchQuery; ?>" aria-label="Page suivante">
+                        <a class="page-link" href="?page=<?php echo min($totalPages, $page + 1) . $baseQuery; ?>" aria-label="<?php echo $translations['next_page']; ?>">
                             &raquo;
                         </a>
                     </li>   
