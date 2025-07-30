@@ -69,6 +69,7 @@ return [
     'breadcrumb_songs' => 'Chansons',
     'author_label' => 'Auteur :',
     'interpreter_label' => 'Interprète :',
+    'translator_label' => 'Traducteur :',
     'listen_song_title' => 'Écouter la chanson',
     'audio_not_supported' => 'Votre navigateur ne supporte pas l\'élément audio.',
     'like_button' => 'J\'aime',

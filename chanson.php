@@ -68,15 +68,26 @@ include 'includes/header.php';
                         </h2>
                     <?php endif; ?>
 
-                    <?php if (!empty($chanson['nom_auteur']) || !empty($chanson['nom_interprete'])): ?>
-                        <p class="text-white mb-2">
+                    <?php if (!empty($chanson['nom_auteur']) || !empty($chanson['nom_interprete']) || !empty($chanson['nom_traducteur'])): ?>
+                       <div class="text-white mb-2">
                           <?php if (!empty($chanson['nom_auteur'])): ?>
-                              <i class="fas fa-pen"></i> <?php echo $translations['author_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_auteur']); ?></strong><br>
+                              <p class="mb-1">
+                                 <i class="fas fa-pen"></i> <?php echo $translations['author_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_auteur']); ?></strong>
+                              </p>
                           <?php endif; ?>
+        
                           <?php if (!empty($chanson['nom_interprete'])): ?>
-                              <i class="fas fa-microphone-alt"></i> <?php echo $translations['interpreter_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_interprete']); ?></strong>
+                              <p class="mb-1">
+                                  <i class="fas fa-microphone-alt"></i> <?php echo $translations['interpreter_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_interprete']); ?></strong>
+                              </p>
+                         <?php endif; ?>
+
+                          <?php if (!empty($chanson['nom_traducteur'])): ?>
+                             <p class="mb-1">
+                                 <i class="fas fa-language"></i> <?php echo $translations['translator_label']; ?> <strong><?php echo htmlspecialchars($chanson['nom_traducteur']); ?></strong>
+                             </p>
                           <?php endif; ?>
-                        </p>
+                        </div>
                     <?php endif; ?>
                     
                 </div>

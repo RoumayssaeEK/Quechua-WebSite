@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand" href="index.php?lang=<?php echo $lang; ?>">
-            <i class="fas fa-feather"></i> <?php echo $translations['navbar_brand']; ?>
+            <img src="media/images/logo CEQU.jpg" alt="Logo" height="40">
+            <?php echo $translations['navbar_brand']; ?>
         </a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -69,11 +69,13 @@ class Database {
         try {
             $query = "SELECT c.*, l.nom_langue,
                          a.nom as nom_auteur,
-                         i.nom as nom_interprete
+                         i.nom as nom_interprete,
+                         t.nom AS nom_traducteur
                   FROM chansons c 
                   LEFT JOIN langue l ON c.id_langue = l.id_langue 
                   LEFT JOIN auteur a ON c.id_auteur = a.id_auteur
                   LEFT JOIN interprete i ON c.id_interprete = i.id_interprete
+                  LEFT JOIN traducteur t ON c.id_traducteur = t.id_traducteur
                   WHERE c.id = :id";
             
             $stmt = $this->pdo->prepare($query);
@@ -188,6 +190,23 @@ public function getChansonsByInterprete($id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+public function getChansonsWithDetailsPaginated($limit, $offset) {
+        $query = "SELECT chansons.*, 
+                         langue.nom_langue, 
+                         auteur.nom AS nom_auteur, 
+                         interprete.nom AS nom_interprete
+                  FROM chansons 
+                  LEFT JOIN langue ON chansons.id_langue = langue.id_langue 
+                  LEFT JOIN auteur ON chansons.id_auteur = auteur.id_auteur 
+                  LEFT JOIN interprete ON chansons.id_interprete = interprete.id_interprete 
+                  LIMIT :limit OFFSET :offset";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
 
 }
 ?>

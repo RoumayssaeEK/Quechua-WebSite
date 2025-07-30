@@ -102,15 +102,15 @@ include 'includes/header.php';
         <section class="content-wrapper p-3">
             <h2 class="text-center mb-3 display-7 text-dark"><?php echo $translations['or_contact_directly']; ?></h2>
             <div class="row g-4 justify-content-center">
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <a href="mailto:contact@quechua-chante.com" class="text-decoration-none">
+                <div class="col-lg-5 col-md-7 col-sm-10">
+                    <a href="mailto:centre_de_etude_du_quechua@yahoo.com" class="text-decoration-none">
                         <div class="feature-card email-card p-2  text-center">
                         <div class="feature-card p-2 h-100 text-center">
                             <div class="feature-icon mb-2">
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <h3 class="h5 mb-2 text-dark"><?php echo $translations['email']; ?></h3>
-                            <p class="text-muted mb-0">contact@quechua-chante.com</p>
+                            <p class="text-muted mb-0">centre_de_etudes_du_quechua@yahoo.com</p>
                         </div>
                     </a>
                 </div>
