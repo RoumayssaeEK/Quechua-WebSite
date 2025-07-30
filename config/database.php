@@ -194,11 +194,13 @@ public function getChansonsWithDetailsPaginated($limit, $offset) {
         $query = "SELECT chansons.*, 
                          langue.nom_langue, 
                          auteur.nom AS nom_auteur, 
-                         interprete.nom AS nom_interprete
+                         interprete.nom AS nom_interprete,
+                         traducteur.nom AS nom_traducteur
                   FROM chansons 
                   LEFT JOIN langue ON chansons.id_langue = langue.id_langue 
                   LEFT JOIN auteur ON chansons.id_auteur = auteur.id_auteur 
                   LEFT JOIN interprete ON chansons.id_interprete = interprete.id_interprete 
+                  LEFT JOIN traducteur ON chansons.id_traducteur = traducteur.id_traducteur
                   LIMIT :limit OFFSET :offset";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);

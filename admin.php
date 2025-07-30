@@ -64,7 +64,7 @@ function ajouterChanson($pdo) {
 
          // Vérifier ou insérer l'auteur
         $nomAuteur = trim($_POST['nom_auteur']);
-        $stmt = $pdo->prepare("SELECT id_auteur FROM auteur WHERE nom = :nom");
+        $stmt = $pdo->prepare("SELECT id_auteur FROM auteur WHERE LOWER(nom) = LOWER(:nom)");
         $stmt->execute([':nom' => $nomAuteur]);
         $auteur = $stmt->fetch();
 
@@ -78,7 +78,7 @@ function ajouterChanson($pdo) {
 
         // Vérifier ou insérer l’interprète
         $nomInterprete = trim($_POST['nom_interprete']);
-        $stmt = $pdo->prepare("SELECT id_interprete FROM interprete WHERE nom = :nom");
+        $stmt = $pdo->prepare("SELECT id_interprete FROM interprete WHERE LOWER(nom) = LOWER(:nom)");
         $stmt->execute([':nom' => $nomInterprete]);
         $interprete = $stmt->fetch();
 
@@ -89,15 +89,33 @@ function ajouterChanson($pdo) {
         $stmt->execute([':nom' => $nomInterprete]);
         $idInterprete = $pdo->lastInsertId();
         }
+
+        // Vérifier ou insérer le traducteur
+        $nomTraducteur = trim($_POST['nom_traducteur']);
+        $idTraducteur = null;
+
+        if (!empty($nomTraducteur)) {
+         $stmt = $pdo->prepare("SELECT id_traducteur FROM traducteur WHERE LOWER(nom) = LOWER(:nom)");
+         $stmt->execute([':nom' => $nomTraducteur]);
+         $traducteur = $stmt->fetch();
+
+           if ($traducteur) {
+             $idTraducteur = $traducteur['id_traducteur'];
+           } else {
+           $stmt = $pdo->prepare("INSERT INTO traducteur (nom) VALUES (:nom)");
+           $stmt->execute([':nom' => $nomTraducteur]);
+           $idTraducteur = $pdo->lastInsertId();
+           }
+        }
         
         $query = "INSERT INTO chansons (titre_quechua, titre_langue, paroles_quechua, paroles_langue, 
-                  id_langue, audio, karaoke, id_interprete, id_auteur) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                  id_langue, audio, karaoke, id_interprete, id_auteur, id_traducteur) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $pdo->prepare($query);
         $stmt->execute([
             $titre_quechua, $titre_langue, $paroles_quechua, $paroles_langue,
-            $id_langue, $audio_path, $karaoke_path,$idInterprete,$idAuteur
+            $id_langue, $audio_path, $karaoke_path,$idInterprete,$idAuteur,$idTraducteur
         ]);
         
         return "Chanson ajoutée avec succès !";
@@ -117,6 +135,7 @@ function modifierChanson($pdo) {
         $id_langue = $_POST['id_langue'] ?? null;
         $nomAuteur = $_POST['nom_auteur'] ?? null;
         $nomInterprete = $_POST['nom_interprete'] ?? null;
+        $nomTraducteur = $_POST['nom_traducteur'] ?? null;
 
         
         
@@ -161,7 +180,7 @@ function modifierChanson($pdo) {
 
         // Gérer l’auteur
         if ($nomAuteur) {
-            $stmtAuteur = $pdo->prepare("SELECT id_auteur FROM auteur WHERE nom = :nom");
+            $stmtAuteur = $pdo->prepare("SELECT id_auteur FROM auteur WHERE LOWER(nom) = LOWER(:nom)");
             $stmtAuteur->execute([':nom' => $nomAuteur]);
             $auteur = $stmtAuteur->fetch();
 
@@ -178,7 +197,7 @@ function modifierChanson($pdo) {
 
       // Gérer l’interprète
        if ($nomInterprete) {
-           $stmtInterprete = $pdo->prepare("SELECT id_interprete FROM interprete WHERE nom = :nom");
+           $stmtInterprete = $pdo->prepare("SELECT id_interprete FROM interprete WHERE LOWER(nom) = LOWER(:nom)");
            $stmtInterprete->execute([':nom' => $nomInterprete]);
            $interprete = $stmtInterprete->fetch();
 
@@ -193,14 +212,32 @@ function modifierChanson($pdo) {
             $idInterprete = null;
         }
 
+        // Gérer le traducteur
+        if (!empty($_POST['nom_traducteur'])) {
+           $nomTraducteur = trim($_POST['nom_traducteur']);
+           $stmtTraducteur = $pdo->prepare("SELECT id_traducteur FROM traducteur WHERE LOWER(nom) = LOWER(:nom)");
+           $stmtTraducteur->execute([':nom' => $nomTraducteur]);
+           $traducteur = $stmtTraducteur->fetch();
+
+        if ($traducteur) {
+            $idTraducteur = $traducteur['id_traducteur'];
+        } else {
+            $stmtInsert = $pdo->prepare("INSERT INTO traducteur (nom) VALUES (:nom)");
+            $stmtInsert->execute([':nom' => $nomTraducteur]);
+            $idTraducteur = $pdo->lastInsertId();
+        }
+        } else {
+            $idTraducteur = null;
+        }
+
         
         $query = "UPDATE chansons SET titre_quechua = ?, titre_langue = ?, paroles_quechua = ?, 
-                  paroles_langue = ?, id_langue = ?, audio = ?, karaoke = ?, id_interprete = ?, id_auteur = ? WHERE id = ?";
+                  paroles_langue = ?, id_langue = ?, audio = ?, karaoke = ?, id_interprete = ?, id_auteur = ?, id_traducteur = ? WHERE id = ?";
         
         $stmt = $pdo->prepare($query);
         $stmt->execute([
             $titre_quechua, $titre_langue, $paroles_quechua, $paroles_langue,
-            $id_langue, $audio_path, $karaoke_path, $idInterprete, $idAuteur, $id
+            $id_langue, $audio_path, $karaoke_path, $idInterprete, $idAuteur, $idTraducteur, $id
         ]);
         
         return "Chanson modifiée avec succès !";
@@ -298,7 +335,7 @@ $search = $_GET['search'] ?? null;
 if ($search) {
     $chansons = $database->searchChansonsByTitre($search);
 } else {
-    $chansons = $database->getChansonsWithLangue();
+    $chansons = $database->getChansonsWithDetailsPaginated($limit, $offset);
 }
 
 
@@ -672,6 +709,12 @@ include 'includes/header.php';
                <input type="text" name="nom_interprete" id="nom_interprete" class="form-control" required>
            </div>
 
+           <!-- Nom du traducteur -->
+           <div class="mb-3">
+              <label for="nom_traducteur" class="form-label">Nom du traducteur</label>
+              <input type="text" name="nom_traducteur" id="nom_traducteur" class="form-control">
+          </div>
+
             
             <div class="form-group">
                 <label for="audio">Fichier Audio (MP3, WAV, OGG)</label>
@@ -749,6 +792,11 @@ include 'includes/header.php';
                <input type="text" class="form-control" name="nom_interprete" id="edit_nom_interprete">
            </div>
 
+           <div class="form-group">
+               <label for="edit_nom_traducteur">Nom du traducteur</label>
+               <input type="text" class="form-control" name="nom_traducteur" id="edit_nom_traducteur">
+          </div>
+
 
             <div class="form-group">
                 <label for="edit_audio">Nouveau fichier Audio </label>
@@ -818,6 +866,7 @@ function editSong(id) {
         document.getElementById('edit_paroles_langue').value = chanson.paroles_langue || '';
         document.getElementById('edit_nom_auteur').value = chanson.nom_auteur || '';
         document.getElementById('edit_nom_interprete').value = chanson.nom_interprete || '';
+        document.getElementById('edit_nom_traducteur').value = chanson.nom_traducteur || '';
        
         
         openModal('editModal');
