@@ -47,12 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
            
-            $stmt = $pdo->prepare("SELECT id, username, password FROM utilisateur WHERE username = ? OR email = ?");
-            $stmt->execute([$username, $username]); // Passer le même username pour les deux paramètres
+            $stmt = $pdo->prepare("SELECT id, username, password FROM utilisateur WHERE LOWER(username) = LOWER(?) OR email = ?");
+            $stmt->execute([$username, $username]); 
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($user && password_verify($password, $user['password'])) {
-                // Définir les sessions correctement
+                
                 $_SESSION['admin_logged_in'] = true;
                 $_SESSION['admin_id'] = $user['id'];
                 $_SESSION['admin_username'] = $user['username'];
