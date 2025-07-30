@@ -190,7 +190,7 @@ include 'includes/header.php';
     font-size: 1rem;
 }
 
-/* Style pour le sélecteur de langue */
+
 .lang-selector {
     position: fixed;
     top: 20px;

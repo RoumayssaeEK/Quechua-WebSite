@@ -182,7 +182,7 @@ try {
 
 
 <style>
-/* Styles pour les cartes de chansons */
+
 .chanson-card {
     transition: all 0.3s ease;
     border-radius: 15px;
@@ -212,7 +212,7 @@ try {
     color: rgba(255,255,255,0.5);
 }
 
-/* Navigation links avec couleur de survol corrigée */
+
 .breadcrumb-item a.text-white-50 {
     color: rgba(255,255,255,0.7) !important;
     text-decoration: none;
@@ -223,13 +223,13 @@ try {
     color: rgba(255,255,255,1) !important;
 }
 
-/* S'assurer que les liens soient cliquables */
+
 .breadcrumb-item a {
     pointer-events: auto;
     cursor: pointer;
 }
 
-/* Avatar de l'interprète adapté au style du site */
+
 .avatar-circle-large {
     width: 100px;
     height: 100px;
@@ -245,7 +245,7 @@ try {
     backdrop-filter: blur(10px);
 }
 
-/* Content wrappers avec style unifié */
+
 .content-wrapper {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
@@ -255,7 +255,7 @@ try {
     animation-fill-mode: both;
 }
 
-/* Sections */
+
 .section-title {
     color: #2c3e50;
     font-weight: 600;
@@ -266,7 +266,7 @@ try {
     text-align: center;
 }
 
-/* Biographie avec style cohérent */
+
 .biographie-content {
     background: #f8f9fa;
     padding: 2rem;
@@ -280,7 +280,7 @@ try {
     margin-bottom: 0;
 }
 
-/* Couleur primaire adaptée au thème */
+
 .text-primary {
     color: #f39c12 !important;
 }
@@ -297,7 +297,7 @@ try {
     box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
 }
 
-/* Card styling cohérent */
+
 .card {
     border-radius: 15px;
     overflow: hidden;
@@ -319,7 +319,7 @@ try {
     font-size: 0.9rem;
 }
 
-/* Badge styling cohérent */
+
 .badge {
     font-size: 0.75rem;
 }
@@ -328,7 +328,7 @@ try {
     margin-right: 0.3rem;
 }
 
-/* Animations décalées pour les cartes */
+
 .chanson-card:nth-child(1) { animation-delay: 0s; }
 .chanson-card:nth-child(2) { animation-delay: 0.1s; }
 .chanson-card:nth-child(3) { animation-delay: 0.2s; }
@@ -339,7 +339,7 @@ try {
 .chanson-card:nth-child(8) { animation-delay: 0.7s; }
 .chanson-card:nth-child(9) { animation-delay: 0.8s; }
 
-/* Animation keyframes */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -351,7 +351,7 @@ try {
     }
 }
 
-/* Effet de survol subtil pour les cartes */
+
 .card::before {
     content: '';
     position: absolute;
@@ -374,7 +374,7 @@ try {
     z-index: 1;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .hero-section {
         padding: 3rem 0;
@@ -414,7 +414,7 @@ try {
     }
 }
 
-/* Amélioration générale de l'interface - couleurs chaudes */
+
 .bg-gradient {
     background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
 }

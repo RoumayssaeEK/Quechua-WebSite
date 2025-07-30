@@ -8,7 +8,7 @@ if (!in_array($lang, $allowed_langs)) {
     $lang = 'fr';
 }
 
-// Charger le fichier de traduction
+
 $translations = include "lang/{$lang}.php";
 
 

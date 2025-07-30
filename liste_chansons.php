@@ -10,7 +10,7 @@ if (!in_array($lang, $allowed_langs)) {
     $lang = 'fr';
 }
 
-// Charger le fichier de traduction
+
 $translations = include "lang/{$lang}.php";
 
 $database = new Database();
@@ -214,7 +214,7 @@ include 'includes/header.php';
     box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
 }
 
-/* Animations décalées pour les cartes */
+
 .chanson-card:nth-child(1) { animation-delay: 0s; }
 .chanson-card:nth-child(2) { animation-delay: 0.1s; }
 .chanson-card:nth-child(3) { animation-delay: 0.2s; }
@@ -225,7 +225,7 @@ include 'includes/header.php';
 .chanson-card:nth-child(8) { animation-delay: 0.7s; }
 .chanson-card:nth-child(9) { animation-delay: 0.8s; }
 
-/* Styles pour les badges */
+
 .badge {
     font-size: 0.75rem;
 }
@@ -234,7 +234,7 @@ include 'includes/header.php';
     margin-right: 0.3rem;
 }
 
-/* Animation keyframes */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -257,7 +257,7 @@ include 'includes/header.php';
     }
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
    
     .chanson-card:hover {
@@ -279,12 +279,12 @@ include 'includes/header.php';
     }
 }
 
-/* Amélioration générale de l'interface */
+
 .bg-gradient {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* Style pour la section content-wrapper */
+
 .content-wrapper {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;

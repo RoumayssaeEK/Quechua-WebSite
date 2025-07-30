@@ -62,7 +62,7 @@ function ajouterChanson($pdo) {
             $karaoke_path = uploadFile($_FILES['karaoke'], 'karaoke');
         }
 
-         // Vérifier ou insérer l'auteur
+        
         $nomAuteur = trim($_POST['nom_auteur']);
         $stmt = $pdo->prepare("SELECT id_auteur FROM auteur WHERE LOWER(nom) = LOWER(:nom)");
         $stmt->execute([':nom' => $nomAuteur]);
@@ -76,7 +76,7 @@ function ajouterChanson($pdo) {
         $idAuteur = $pdo->lastInsertId();
         }
 
-        // Vérifier ou insérer l’interprète
+       
         $nomInterprete = trim($_POST['nom_interprete']);
         $stmt = $pdo->prepare("SELECT id_interprete FROM interprete WHERE LOWER(nom) = LOWER(:nom)");
         $stmt->execute([':nom' => $nomInterprete]);
@@ -90,7 +90,7 @@ function ajouterChanson($pdo) {
         $idInterprete = $pdo->lastInsertId();
         }
 
-        // Vérifier ou insérer le traducteur
+        
         $nomTraducteur = trim($_POST['nom_traducteur']);
         $idTraducteur = null;
 
@@ -153,7 +153,7 @@ function modifierChanson($pdo) {
             $audio_path = null;  
         }
         
-        // Supprimer karaoke si demandé
+        
         if (isset($_POST['delete_karaoke']) && $_POST['delete_karaoke'] == '1') {
             if ($karaoke_path && file_exists("media/karaoke/" . $karaoke_path)) {
                 unlink("media/karaoke/" . $karaoke_path);
@@ -161,9 +161,9 @@ function modifierChanson($pdo) {
             $karaoke_path = null; 
         }
         
-        // Upload nouveaux fichiers si fournis
+        
         if (isset($_FILES['audio']) && $_FILES['audio']['error'] === UPLOAD_ERR_OK) {
-            // Supprimer l'ancien fichier
+           
             if ($audio_path && file_exists("media/audios/" . $audio_path)) {
                 unlink("media/audios/" . $audio_path);
             }
@@ -171,14 +171,14 @@ function modifierChanson($pdo) {
         }
         
         if (isset($_FILES['karaoke']) && $_FILES['karaoke']['error'] === UPLOAD_ERR_OK) {
-            // Supprimer l'ancien fichier
+            
             if ($karaoke_path && file_exists("media/karaoke/" . $karaoke_path)) {
                 unlink("media/karaoke/" . $karaoke_path);
             }
             $karaoke_path = uploadFile($_FILES['karaoke'], 'karaoke');
         }
 
-        // Gérer l’auteur
+        
         if ($nomAuteur) {
             $stmtAuteur = $pdo->prepare("SELECT id_auteur FROM auteur WHERE LOWER(nom) = LOWER(:nom)");
             $stmtAuteur->execute([':nom' => $nomAuteur]);
@@ -195,7 +195,7 @@ function modifierChanson($pdo) {
             $idAuteur = null;
         }
 
-      // Gérer l’interprète
+      
        if ($nomInterprete) {
            $stmtInterprete = $pdo->prepare("SELECT id_interprete FROM interprete WHERE LOWER(nom) = LOWER(:nom)");
            $stmtInterprete->execute([':nom' => $nomInterprete]);
@@ -212,7 +212,7 @@ function modifierChanson($pdo) {
             $idInterprete = null;
         }
 
-        // Gérer le traducteur
+        
         if (!empty($_POST['nom_traducteur'])) {
            $nomTraducteur = trim($_POST['nom_traducteur']);
            $stmtTraducteur = $pdo->prepare("SELECT id_traducteur FROM traducteur WHERE LOWER(nom) = LOWER(:nom)");
@@ -246,7 +246,7 @@ function modifierChanson($pdo) {
     }
 }
 
-// Fonction pour supprimer une chanson
+
 function supprimerChanson($pdo) {
     try {
         $id = $_POST['id'] ?? 0;
@@ -256,7 +256,7 @@ function supprimerChanson($pdo) {
         $stmt->execute([$id]);
         $chanson = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Supprimer les fichiers
+        
         if ($chanson['audio'] && file_exists("media/audios/" . $chanson['audio'])) {
             unlink("media/audios/" . $chanson['audio']);
         }
@@ -264,7 +264,7 @@ function supprimerChanson($pdo) {
             unlink("media/karaoke/" . $chanson['karaoke']);
         }
         
-        // Supprimer de la base de données
+       
         $stmt = $pdo->prepare("DELETE FROM chansons WHERE id = ?");
         $stmt->execute([$id]);
         
@@ -274,7 +274,7 @@ function supprimerChanson($pdo) {
     }
 }
 
-// Fonction pour upload des fichiers
+
 function uploadFile($file, $type) {
     
     if ($type === 'audio') {
@@ -289,14 +289,14 @@ function uploadFile($file, $type) {
         throw new Exception("Type de fichier non supporté");
     }
     
-    // Créer le dossier s'il n'existe pas
+    
     if (!is_dir($upload_dir)) {
         if (!mkdir($upload_dir, 0755, true)) {
             throw new Exception("Impossible de créer le dossier : " . $upload_dir);
         }
     }
     
-    // Vérifier l'extension
+   
     $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($extension, $allowed_extensions)) {
         throw new Exception("Extension de fichier non autorisée. Extensions autorisées : " . implode(', ', $allowed_extensions));
@@ -329,7 +329,7 @@ function uploadFile($file, $type) {
     return $filename;
 }
 
-// Récupération des données pour l'affichage
+
 $search = $_GET['search'] ?? null;
 
 if ($search) {
@@ -697,19 +697,19 @@ include 'includes/header.php';
                 <textarea class="form-control" name="paroles_langue" rows="5"></textarea>
             </div>
 
-            <!-- Nom de l’auteur -->
+           
            <div class="mb-3">
                <label for="nom_auteur" class="form-label">Nom de l’auteur</label>
                <input type="text" name="nom_auteur" id="nom_auteur" class="form-control" required>
            </div>
 
-          <!-- Nom de l’interprète -->
+          
            <div class="mb-3">
                <label for="nom_interprete" class="form-label">Nom de l’interprète</label>
                <input type="text" name="nom_interprete" id="nom_interprete" class="form-control" required>
            </div>
 
-           <!-- Nom du traducteur -->
+           
            <div class="mb-3">
               <label for="nom_traducteur" class="form-label">Nom du traducteur</label>
               <input type="text" name="nom_traducteur" id="nom_traducteur" class="form-control">
@@ -844,7 +844,7 @@ include 'includes/header.php';
 
 
 <script>
-// Données des chansons pour JavaScript
+
 const chansonsData = <?php echo json_encode($chansons); ?>;
 
 function openModal(modalId) {
@@ -887,7 +887,7 @@ function deleteSong(id) {
     }
 }
 
-// Fermer les modales en cliquant à l'extérieur
+
 window.onclick = function(event) {
     const modals = document.getElementsByClassName('modal');
     for (let i = 0; i < modals.length; i++) {
@@ -897,7 +897,7 @@ window.onclick = function(event) {
     }
 }
 
-// Validation des fichiers côté client
+
 document.addEventListener('DOMContentLoaded', function() {
     const audioInputs = document.querySelectorAll('input[name="audio"]');
     const karaokeInputs = document.querySelectorAll('input[name="karaoke"]');

@@ -9,7 +9,7 @@ if (!in_array($lang, $allowed_langs)) {
     $lang = 'fr';
 }
 
-// Charger le fichier de traduction
+
 $translations = include "lang/{$lang}.php";
 
 $database = new Database();
@@ -170,7 +170,7 @@ include 'includes/header.php';
     transform: translateY(0);
 }
 
-/* Animations décalées pour les cartes */
+
 .interprete-card:nth-child(1) { animation-delay: 0s; }
 .interprete-card:nth-child(2) { animation-delay: 0.1s; }
 .interprete-card:nth-child(3) { animation-delay: 0.2s; }
@@ -181,7 +181,7 @@ include 'includes/header.php';
 .interprete-card:nth-child(8) { animation-delay: 0.7s; }
 .interprete-card:nth-child(9) { animation-delay: 0.8s; }
 
-/* Animation keyframes */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -193,7 +193,7 @@ include 'includes/header.php';
     }
 }
 
-/* Breadcrumb styling */
+
 .breadcrumb-item + .breadcrumb-item::before {
     color: rgba(255,255,255,0.5);
 }
@@ -206,7 +206,7 @@ include 'includes/header.php';
     color: rgba(255,255,255,1) !important;
 }
 
-/* Style pour la section content-wrapper */
+
 .content-wrapper {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
@@ -214,7 +214,7 @@ include 'includes/header.php';
     backdrop-filter: blur(10px);
 }
 
-/* Badge styling cohérent */
+
 .badge {
     font-size: 0.75rem;
 }
@@ -223,7 +223,7 @@ include 'includes/header.php';
     margin-right: 0.3rem;
 }
 
-/* Effet de survol subtil pour les cartes */
+
 .card::before {
     content: '';
     position: absolute;
@@ -246,7 +246,7 @@ include 'includes/header.php';
     z-index: 1;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .interprete-card:hover {
         transform: translateY(-5px);
@@ -282,7 +282,7 @@ include 'includes/header.php';
     }
 }
 
-/* Amélioration générale de l'interface */
+
 .bg-gradient {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
