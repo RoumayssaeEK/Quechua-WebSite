@@ -26,7 +26,7 @@ if (!$chanson) {
     exit;
 }
 
-$page_title = htmlspecialchars($chanson['titre']) . $translations['song_page_title_suffix'];
+$page_title = htmlspecialchars($chanson['titre_quechua']) . $translations['song_page_title_suffix'];
 
 include 'includes/header.php';
 ?>
